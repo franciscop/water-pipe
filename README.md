@@ -95,8 +95,8 @@ module.exports.index = function(req, res, next){
       
       notification.find({ user: req.user._id, read: false }, function(err, notifications){
         res.render('subject/index', {
+          user: req.user,
           subjects: subjects,
-          users: user,
           reputation: reputation,
           notifications: notifications
         });
@@ -128,7 +128,7 @@ module.exports.index = function(req, res, next){
     .pipe(model.notification.unreadByUser, req.user._id)
     .end(function (err, data){
       if (err) return next(err);
-      res.render('subject/index', data);
+      res.render('subject/index', extend(data, { user: req.user });
     });
 };
 ```
