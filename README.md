@@ -1,6 +1,6 @@
 # Water Pipe
 
-A small *async* piping utility for Node.js. It's a wrapper of [**water**​fall](https://github.com/caolan/async#waterfall) inspired by \*nix piping. Its main advantages are:
+A small *async* piping utility for Node.js. It's a wrapper of [**water**​fall](https://github.com/caolan/async#waterfall) inspired by \*nix **pipe**. Its main advantages are:
 
 - Stop the [callback hell](http://callbackhell.com/) keeping it plain
 - Handle errors elegantly
@@ -193,7 +193,7 @@ pipe(model.subject.byUser, req.user._id)
   .end(/* ... */)
 ```
 
-As you can see a pipeable function is really flexible, it can fetch data, check data, parse data or many others.
+As you can see a pipeable function is really flexible, it can fetch, check, save, parse, send, write data or any other thing that you can normally do with some data.
 
 
 
