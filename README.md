@@ -10,19 +10,17 @@ A small *async* piping utility for Node.js. It's a wrapper of [**water**​fall]
 
 ## Getting started
 
-Install it and add it to your node:
+Install it to your node project:
 
 ```bash
 npm install water-fall --save
 ```
 
+Include it and you are ready to use it:
+
 ```js
 var pipe = require('water-fall');
-```
 
-Then you are ready to use it. See what `op1` and `op2` are [in the inteface](#interface):
-
-```js
 pipe(op1, '1')
   .pipe(op2)
   .pipe(op1)
