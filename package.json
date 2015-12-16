@@ -1,0 +1,32 @@
+{
+  "name": "water-pipe",
+  "version": "0.1.0",
+  "description": "A small async piping library based on waterflow and inspired by *nix pipes",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/franciscop/water-pipe.git"
+  },
+  "keywords": [
+    "pipe",
+    "waterfall",
+    "async",
+    "join"
+  ],
+  "author": "Francisco Presencia Fandos <publicfrancisco@hotmail.com> (http://francisco.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/franciscop/water-pipe/issues"
+  },
+  "homepage": "https://github.com/franciscop/water-pipe#readme",
+  "dependencies": {
+    "async": "^1.5.0"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0"
+  }
+}
