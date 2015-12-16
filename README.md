@@ -4,7 +4,7 @@ A small *async* piping utility for Node.js. It's a wrapper of [**water**​fall]
 
 - Stop the [callback hell](http://callbackhell.com/) keeping it plain
 - Handle errors elegantly
-- Modularize your code with a common reusable module interface
+- Modularize your code with a reusable interface
 
 
 
