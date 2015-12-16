@@ -50,6 +50,7 @@ Each operation looks like this:
 
 ```js
 function operation(parameter, previous, callback){
+  // ... logic
   callback(error, nextData);
 }
 ```
