@@ -96,6 +96,7 @@ module.exports.index = function(req, res, next){
       notification.find({ user: req.user._id, read: false }, function(err, notifications){
         res.render('subject/index', {
           user: req.user,
+          
           subjects: subjects,
           reputation: reputation,
           notifications: notifications

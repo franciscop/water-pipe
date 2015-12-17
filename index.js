@@ -40,41 +40,38 @@ function wrap(callback, arg){
   }
 }
 
-function isFunction(fn){
-  return fn && typeof fn === "function";
-}
-
-
 var pipe = function(callback, arg, autopipe){
   
-  // Avoid having to call "new pipe()"
+  // Avoid having to call "new pipe()" and make sure we're dealing with an obj
   if (!(this instanceof pipe)) {    // !() http://stackoverflow.com/q/8875878
     
-    // console.log("ARGUMENTS INIT ", arguments);
-    // First time we should wrap it really tight since there's no initial value
-    callback = wrap(wrap(callback, arg), {});
-    return new pipe(callback, arg, autopipe);
-  }
-    
-  // Wrap it only if there's something to wrap
-  this.callbacks = this.callbacks || [];
-  
-  // Make sure to only push the good ones
-  this.callbacks.push(callback);
-  
-  this.pipe = function(callback, arg, autopipe){
+    // First time we should wrap it since there's no initial value
     callback = wrap(callback, arg);
-    var self = new pipe(callback, arg, autopipe);
-    self.callbacks = this.callbacks.concat(self.callbacks);
-    return self;
-  };
+    return new pipe(callback, {}, autopipe);
+  }
   
-  this.end = function(callback){
-    if (!callback) throw new Error("end needs a callback");
-    asyn.waterfall(this.callbacks.filter(isFunction), callback);
-  };
-  
+  // Create array if nonexistent and push calback, stackoverflow.com/a/14614169
+  //  this.callbacks = (this.callbacks || []).concat(wrap(callback, arg));
+  return this.add(callback, arg);
+};
+
+pipe.prototype.callbacks = [];
+
+pipe.prototype.add = function(callback, arg){
+  if (callback) this.callbacks = this.callbacks.concat(wrap(callback, arg));
+  //this.callbacks = this.callbacks;
+  //if (callback) this.callbacks.push(wrap(callback, arg));
+  //if (callback) Array.prototype.push.apply(this.callbacks, wrap(callback, arg));
+  //if (callback) this.callbacks.push(wrap(callback, arg));
   return this;
+};
+
+// Make pipe() chainable to pipe()
+pipe.prototype.pipe = pipe;
+
+// Allow for ending the pipeline
+pipe.prototype.end = function(callback){
+  asyn.waterfall(this.callbacks, callback);
 };
 
 module.exports = pipe;
