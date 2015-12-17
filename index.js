@@ -1,28 +1,27 @@
 var asyn = require('async');
 
-
+// Wrap it with async
 function wrap(callback, arg){
   return callback ? asyn.apply(callback, arg) : false;
 }
 
+// Pipe it!
 var pipe = function(callback, arg, autopipe){
   
   // Avoid having to call "new pipe()" and make sure we're dealing with an obj
-  if (!(this instanceof pipe)) {    // !() http://stackoverflow.com/q/8875878
-    
-    // First time we should wrap it since there's no initial value
-    callback = wrap(callback, arg);
-    return new pipe(callback, {}, autopipe);
-  }
+  return !(this instanceof pipe) ?     // !() http://stackoverflow.com/q/8875878
   
-  // Create array if nonexistent and push calback, stackoverflow.com/a/14614169
-  return this.add(callback, arg);
+    // First time we should wrap it since there's no initial value
+    new pipe(wrap(callback, arg), {}, autopipe) :
+    
+    // Add to the callback stack, stackoverflow.com/a/14614169
+    this.push(callback, arg);
 };
 
 pipe.prototype.callbacks = [];
 
 // Add a callback to the stack
-pipe.prototype.add = function(callback, arg){
+pipe.prototype.push = function(callback, arg){
   if (callback) this.callbacks = this.callbacks.concat(wrap(callback, arg));
   return this;
 };
@@ -35,7 +34,5 @@ pipe.prototype.end = function(callback){
   asyn.waterfall(this.callbacks, callback);
 };
 
+// Make it usable
 module.exports = pipe;
-
-
-

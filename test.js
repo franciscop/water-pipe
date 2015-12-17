@@ -22,6 +22,18 @@ function joiner(param, initial, callback){
 
 
 
+// pipe(5)
+//   .sum(3)
+//   .minus(2)
+//   .divided(2)
+//   .end();
+// 
+// pipe(require, 'text.json')
+//   .pipe(function(cur, prev, callback){ callback(null, JSON.stringify(prev)); })
+//   .pipe(fs.writeFile, 'bla.txt')
+//   .end();
+
+
 
 describe('pipe()', function(){
 
@@ -49,9 +61,7 @@ describe('pipe().end(fn)', function(){
     pipe(function(param, initial, callback){
       expect(param).to.equal('a');
       expect(initial).to.be.empty;
-      console.log("BAD");
-      console.log(callback);
-      //expect(typeof callback).to.equal('function');
+      expect(typeof callback).to.equal('function');
       done(null, {});
     }, 'a').end(function(){ done(); });
   });
@@ -116,6 +126,10 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
     function minus(param, prev, callback) {
       callback(null, typeof prev === 'number' ? prev - param : param);
     }
+    
+    // pipe.prototype.minus = function(arg){
+    //   return this.push(minus, arg);
+    // };
     
     pipe(sum, 1).pipe(sum, 2).pipe(sum, 3).pipe(minus, 1).end(function(err, num){
       expect(err).to.equal(null);
