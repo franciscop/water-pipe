@@ -1,8 +1,14 @@
 var asyn = require('async');
+var extend = require('extend');
 
 // Wrap it with async
 function wrap(callback, arg){
   return callback ? asyn.apply(callback, arg) : false;
+}
+
+function init(arg, callback){
+  console.log(arguments);
+  callback(null, arg);
 }
 
 // Pipe it!
@@ -11,8 +17,8 @@ var pipe = function(callback, arg, autopipe){
   // Avoid having to call "new pipe()" and make sure we're dealing with an obj
   return !(this instanceof pipe) ?     // !() http://stackoverflow.com/q/8875878
   
-    // First time we should wrap it since there's no initial value
-    new pipe(wrap(callback, arg), {}, autopipe) :
+    // First time we are defined the initial value (it's in the first pos, on 'callback')
+    new pipe(init, callback, autopipe) :
     
     // Add to the callback stack, stackoverflow.com/a/14614169
     this.push(callback, arg);

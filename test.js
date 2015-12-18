@@ -41,8 +41,8 @@ describe('pipe()', function(){
     pipe();
   });
   
-  it('can be initialized with a function', function(){
-    pipe(JohnSnow);
+  it('can be initialized with a variable', function(){
+    pipe({});
   });
 });
 
@@ -53,17 +53,14 @@ describe('pipe().end(fn)', function(){
     pipe().end(function(){});
   });
   
-  it('end() cannot be called empty', function(){
-    expect(pipe().end).to.throw;
-  });
-  
   it('receives a function', function(done){
-    pipe(function(param, initial, callback){
-      expect(param).to.equal('a');
-      expect(initial).to.be.empty;
-      expect(typeof callback).to.equal('function');
-      done(null, {});
-    }, 'a').end(function(){ done(); });
+    pipe({})
+      .pipe(function(param, initial, callback){
+        expect(param).to.equal('a');
+        expect(initial).to.be.empty;
+        expect(typeof callback).to.equal('function');
+        done(null, {});
+      }, 'a').end(function(){ done(); });
   });
   
   it('can be called with a function', function(){
@@ -87,7 +84,7 @@ describe('pipe(fn).end(fn)', function(){
 describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
   
   it('can pipe many times and end', function(done){
-    pipe(JohnSnow)
+    pipe({})
       .pipe(JohnSnow)
       .pipe(JohnSnow, 'a')
       .pipe(JohnSnow, 'b')
@@ -106,10 +103,10 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
     
     // Concatenate strings
     function concat(param, prev, callback){
-      callback(null, typeof prev === 'string' ? prev + param : param);
+      callback(null, prev + param);
     }
     
-    pipe(concat, 'A').pipe(concat, 'B').pipe(concat, 'C').end(function(err, str){
+    pipe("").pipe(concat, 'A').pipe(concat, 'B').pipe(concat, 'C').end(function(err, str){
         expect(err).to.equal(null);
         expect(str).to.equal('ABC');
         done();
@@ -120,18 +117,18 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
   it('can be used for simple operations', function(done){
     
     function sum(param, prev, callback) {
-      callback(null, typeof prev === 'number' ? prev + param : param);
+      callback(null, prev + param);
     }
     
     function minus(param, prev, callback) {
-      callback(null, typeof prev === 'number' ? prev - param : param);
+      callback(null, prev - param);
     }
     
     // pipe.prototype.minus = function(arg){
     //   return this.push(minus, arg);
     // };
     
-    pipe(sum, 1).pipe(sum, 2).pipe(sum, 3).pipe(minus, 1).end(function(err, num){
+    pipe(0).pipe(sum, 1).pipe(sum, 2).pipe(sum, 3).pipe(minus, 1).end(function(err, num){
       expect(err).to.equal(null);
       expect(num).to.equal(5);
       done();
