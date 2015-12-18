@@ -1,6 +1,6 @@
 {
   "name": "water-pipe",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A small async piping library based on waterflow and inspired by *nix pipes",
   "main": "index.js",
   "scripts": {

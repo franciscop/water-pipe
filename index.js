@@ -18,7 +18,7 @@ var pipe = function(callback, arg, autopipe){
   return !(this instanceof pipe) ?     // !() http://stackoverflow.com/q/8875878
   
     // First time we are defined the initial value (it's in the first pos, on 'callback')
-    new pipe(init, callback, autopipe) :
+    new pipe(init, extend(callback, arg), autopipe) :
     
     // Add to the callback stack, stackoverflow.com/a/14614169
     this.push(callback, arg);
