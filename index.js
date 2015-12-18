@@ -1,14 +1,19 @@
 var asyn = require('async');
-var extend = require('extend');
+var extendObj = require('extend');
 
 // Wrap it with async
 function wrap(callback, arg){
   return callback ? asyn.apply(callback, arg) : false;
 }
 
-function init(arg, data, callback){
+function extend(args, data, callback){
+  
   // If there are any arguments, extend it
-  callback(null, arg.length ? extend.apply(false, data, arg) : data);
+  data = args.reduce(function(extra, data){
+    return extendObj(data, extra);
+  }, data);
+  
+  callback(null, data);
 }
 
 // Pipe it!
@@ -18,7 +23,7 @@ var pipe = function(callback, arg, autopipe){
   return !(this instanceof pipe) ?     // !() http://stackoverflow.com/q/8875878
   
     // First time we are defined the initial value (it's in the first pos, on 'callback')
-    new pipe(wrap(init, Array.prototype.slice.call(arguments, 1)), callback, autopipe) :
+    new pipe(wrap(extend, Array.prototype.slice.call(arguments, 1)), callback, autopipe) :
     
     // Add to the callback stack, stackoverflow.com/a/14614169
     this.push(callback, arg);
@@ -42,3 +47,4 @@ pipe.prototype.end = function(callback){
 
 // Make it usable
 module.exports = pipe;
+module.exports.extend = extend;

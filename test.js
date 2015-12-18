@@ -81,6 +81,33 @@ describe('pipe(fn).end(fn)', function(){
 });
 
 
+
+describe('pipe({}, {}).end(fn)', function(){
+  
+  it('can pipe many times and end', function(done){
+    pipe({ a: 'b' }, { c: 'd' })
+      .end(function(err, data){
+        expect(data.a).to.equal('b');
+        expect(data.c).to.equal('d');
+        expect(data).to.be.emtpy;
+        done();
+      }
+    );
+  });
+  
+  
+  it('can pipe many times and end', function(done){
+    pipe({ a: 'b' })
+      .end(function(err, data){
+        expect(data.a).to.equal('b');
+        expect(data).to.be.emtpy;
+        done();
+      }
+    );
+  });
+});
+
+
 describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
   
   it('can pipe many times and end', function(done){
