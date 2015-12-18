@@ -6,9 +6,9 @@ function wrap(callback, arg){
   return callback ? asyn.apply(callback, arg) : false;
 }
 
-function init(arg, callback){
-  console.log(arguments);
-  callback(null, arg);
+function init(arg, data, callback){
+  // If there are any arguments, extend it
+  callback(null, arg.length ? extend.apply(false, data, arg) : data);
 }
 
 // Pipe it!
@@ -18,7 +18,7 @@ var pipe = function(callback, arg, autopipe){
   return !(this instanceof pipe) ?     // !() http://stackoverflow.com/q/8875878
   
     // First time we are defined the initial value (it's in the first pos, on 'callback')
-    new pipe(init, extend(callback, arg), autopipe) :
+    new pipe(wrap(init, Array.prototype.slice.call(arguments, 1)), callback, autopipe) :
     
     // Add to the callback stack, stackoverflow.com/a/14614169
     this.push(callback, arg);
