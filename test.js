@@ -7,7 +7,7 @@ var expect = chai.expect;
 var pipe = require('./index');
 
 // Knows nothing (just keep going)
-function JohnSnow(params, initial, callback){
+function JohnSnow(callback, initial, params){
   callback(null, initial);
 }
 
@@ -15,7 +15,7 @@ function JohnSnow(params, initial, callback){
 function ender(err, data){}
 
 // Extend the initial with the param
-function joiner(param, initial, callback){
+function joiner(callback, initial, param){
   initial[param] = param;
   callback(null, initial);
 }
@@ -55,7 +55,7 @@ describe('pipe().end(fn)', function(){
   
   it('receives a function', function(done){
     pipe({})
-      .pipe(function(param, initial, callback){
+      .pipe(function(callback, initial, param){
         expect(param).to.equal('a');
         expect(initial).to.be.empty;
         expect(typeof callback).to.equal('function');
@@ -72,7 +72,7 @@ describe('pipe().end(fn)', function(){
 describe('pipe(fn).end(fn)', function(){
 
   it('can pipe and end', function(done){
-    pipe(JohnSnow).end(function(err, data){
+    pipe().pipe(JohnSnow).end(function(err, data){
       expect(err).to.equal(null);
       expect(data).to.be.emtpy;
       done();
@@ -117,6 +117,7 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
       .pipe(JohnSnow, 'b')
       .pipe(JohnSnow, 'c')
       .pipe(JohnSnow, 'd')
+      .pipe(JohnSnow, 'X', 'Y')
       .end(function(err, data){
         expect(err).to.equal(null);
         expect(data).to.be.emtpy;
@@ -129,7 +130,7 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
   it('can concatenate strings', function(done){
     
     // Concatenate strings
-    function concat(param, prev, callback){
+    function concat(callback, prev, param){
       callback(null, prev + param);
     }
     
@@ -143,11 +144,11 @@ describe('pipe(fn).pipe(fn).[...].pipe(fn).end(fn)', function(){
   
   it('can be used for simple operations', function(done){
     
-    function sum(param, prev, callback) {
+    function sum(callback, prev, param) {
       callback(null, prev + param);
     }
     
-    function minus(param, prev, callback) {
+    function minus(callback, prev, param) {
       callback(null, prev - param);
     }
     
