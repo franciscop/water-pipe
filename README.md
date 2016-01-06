@@ -19,7 +19,7 @@ npm install water-fall --save
 Include it and you are ready to use it:
 
 ```js
-var start = require('water-fall');
+var start = require('water-pipe');
 
 start(op1, '1').pipe(op2).pipe(op1, 'b').end(function(err, data){
   console.log(data);
